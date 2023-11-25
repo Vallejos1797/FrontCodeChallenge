@@ -1,0 +1,133 @@
+<header class="p-3 px-4 mb-3 border-bottom ">
+  <div class="">
+    <div class="row d-flex justify-content-start">
+      <h6>Modulo Administración</h6>
+      <h3>Administración de usuiarios</h3>
+    </div>
+    <div class="row d-flex align-content-end" >
+      <div class="col-6">
+        <div class="d-flex">
+          <mat-form-field class="m-2">
+            <select class="form-select" matNativeControl  (change)="changeSelect($event,'departmentId')">
+              <option value="">Seleccione un Departamento</option>
+              <option *ngFor="let deparment of departments" value="{{deparment?.id}}">{{deparment?.name}}</option>
+
+            </select>
+          </mat-form-field>
+
+          <mat-form-field class="m-2">
+            <select class="form-select" matNativeControl  (change)="changeSelect($event,'departmentId')">
+              <option value="">Seleccione un Cargo</option>
+              <option *ngFor="let position of positions" value="{{position?.id}}">{{position?.name}}</option>
+
+            </select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-6 ">
+        <div class="row justify-content-end">
+          <div class="col-auto">
+            <button type="submit" class="btn btn-light custom-box " (click)="open(content)">Crear nuevo usuario
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+<div *ngIf="dataSource.length>0">
+  <mat-table [dataSource]="dataSource">
+    <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
+      <mat-header-cell *matHeaderCellDef>{{ col | titlecase }}</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.username }}
+        <ng-container *ngIf="col === 'Acciones'">
+          <button mat-icon-button>
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button>
+            <mat-icon>delete</mat-icon>
+          </button>
+        </ng-container>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+
+  </mat-table>
+  <div class=" d-flex justify-content-between">
+    <h1> Total registros: {{totalDataSource}} </h1>
+    <mat-paginator [length]="totalDataSource" [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="filters.per_page"
+                   [pageIndex]="pageActually"
+                   (page)="handlePage($event)"
+
+                   itemsPerPageLabel="Elementos por página"
+                   nextPageLabel="Siguiente"
+                   previousPageLabel="Anterior"
+                   firstPageLabel="Primera página"
+                   lastPageLabel="Última página"
+    ></mat-paginator>
+  </div>
+
+</div>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Registrar usuario</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="row">
+        <div class="form-group col-6">
+          <label for="exampleInputEmail1">Correo electrónico</label>
+          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                 placeholder="Enter email">
+        </div>
+        <div class="form-group col-6">
+          <label for="exampleInputPassword1">Contraseña</label>
+          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-6">
+          <label for="exampleInputEmail1">Correo electrónico</label>
+          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                 placeholder="Enter email">
+        </div>
+        <div class="form-group col-6">
+          <label for="exampleInputPassword1">Contraseña</label>
+          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-6">
+          <label for="exampleInputEmail1">Correo electrónico</label>
+          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                 placeholder="Enter email">
+        </div>
+        <div class="form-group col-6">
+          <label for="exampleInputPassword1">Contraseña</label>
+          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-6">
+          <label for="exampleInputEmail1">Correo electrónico</label>
+          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                 placeholder="Enter email">
+        </div>
+        <div class="form-group col-6">
+          <label for="exampleInputPassword1">Contraseña</label>
+          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-light bg-primary custom-box " (click)="open(content)">Registrar</button>
+    <button type="button" class="btn btn-light   custom-box" (click)="modal.close('Save click')">Cancelar</button>
+  </div>
+</ng-template>
