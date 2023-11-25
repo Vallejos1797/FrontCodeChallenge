@@ -8,20 +8,24 @@
         </div>
         <div class="row d-flex align-content-end">
           <div class="col-6">
-            <div class="row p-2">
-              <select class="form-select custom-select col" aria-label="Default select example" >
-                <option selected> Seleccione un Departamento</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
+            <div class="d-flex">
+              <mat-form-field class="m-2">
+                <select class="form-select" matNativeControl required>
+                  <option value="volvo">Seleccione un Departamento</option>
+                  <option value="saab">Saab</option>
+                  <option value="mercedes">Mercedes</option>
+                  <option value="audi">Audi</option>
+                </select>
+              </mat-form-field>
 
-              <select class="form-select custom-select col ms-2" aria-label="Default select example" >
-                <option selected>Seleccione un Cargo</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
+              <mat-form-field class="m-2">
+                <select class="form-select" matNativeControl required>
+                  <option value="volvo">Seleccione un Cargo</option>
+                  <option value="saab">Saab</option>
+                  <option value="mercedes">Mercedes</option>
+                  <option value="audi">Audi</option>
+                </select>
+              </mat-form-field>
             </div>
           </div>
           <div class="col-6 ">
@@ -39,37 +43,42 @@
     <div class="container-fluid p-3 shadow">
       <div class="d-grid gap-">
         <div class="bg-light border bg-white p-4">
-          <table class="table table-hover custom-table">
-            <thead>
-            <tr>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
-              <th scope="col">Last</th>
-              <th scope="col">Last</th>
-              <th scope="col">Last</th>
-              <th scope="col">Last</th>
-              <th scope="col">ACCIONES</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let d of [1,2,3,4,5,6,7,8,9];  let index=index; ">
-              <td>Mark</td>
-              <td>Mark</td>
-              <td>Mark</td>
-              <td>Mark</td>
-              <td>Mark</td>
-              <td>Mark</td>
-              <td>
-                <button type="button" class="btn btn-outline-success border-0"><i class="fas fa-edit"></i> Editar</button>
-                <button type="button" class="btn btn-outline-danger border-0"><i class="fas fa-trash"></i> Eliminar</button>
+          <mat-table [dataSource]="dataSource">
+            <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
+              <mat-header-cell *matHeaderCellDef>{{ col | titlecase }}</mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                {{ element[col] }}
+                <ng-container *ngIf="col === 'column7'">
+                  <!-- Aquí puedes poner tu icono de editar para la columna 7 -->
+                  <button mat-icon-button>
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button>
+                    <mat-icon>trash</mat-icon>
+                  </button>
+                </ng-container>
+              </mat-cell>
+            </ng-container>
 
-              </td>
-            </tr>
-
-            </tbody>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
 
-          </table>
+          </mat-table>
+          <div class=" d-flex justify-content-between">
+            <h1> Total: </h1>
+            <mat-paginator [length]="dataSource.length" [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="pageSize"
+                           [pageIndex]="pageIndex"
+                           (page)="handlePage($event)"
+
+                           itemsPerPageLabel="Elementos por página"
+                           nextPageLabel="Siguiente"
+                           previousPageLabel="Anterior"
+                           firstPageLabel="Primera página"
+                           lastPageLabel="Última página"
+            ></mat-paginator>
+          </div>
+
         </div>
       </div>
     </div>
