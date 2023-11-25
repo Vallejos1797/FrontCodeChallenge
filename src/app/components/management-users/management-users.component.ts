@@ -11,7 +11,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {ManagementUsersService} from "../../services/management-users.service";
 import {HttpClient, HttpClientModule, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ModalDismissReasons, NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 
 export interface TableItem {
   column1: string;
@@ -35,8 +35,9 @@ const ELEMENT_DATA: any = [];
 
 export class ManagementUsersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  private modalRef: NgbModalRef | undefined;
 
-
+  idUserSelected: number = 0;
   httpClient = inject(HttpClient);
   totalDataSource = 0
   displayedColumns: string[] = ['Usuario', 'Nombres', 'Apellidos', 'Departamento', ' Cargo', 'Email', 'Acciones'];
@@ -96,6 +97,11 @@ export class ManagementUsersComponent implements OnInit {
     return this.httpClient.get(`${this.apiUrl}customUser`, {params})
   }
 
+  deleteByUser(idUser?: number): Observable<any> {
+    return this.httpClient.delete(`${this.apiUrl}customUser/${idUser}`,)
+  }
+
+
   getAllDepartments(options?: any): Observable<any> {
 
     const params = new HttpParams({fromObject: options});
@@ -109,35 +115,36 @@ export class ManagementUsersComponent implements OnInit {
   }
 
 
-  open(content: TemplateRef<any>) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then(
-      (result) => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      },
-    );
+  open(content: TemplateRef<any>, idUser?: number) {
+    console.log('tomo', idUser)
+    this.idUserSelected = idUser ? idUser : 0
+    this.modalRef = this.modalRef = this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'});
+
   }
 
-  private getDismissReason(reason: any): string {
-    switch (reason) {
-      case ModalDismissReasons.ESC:
-        return 'by pressing ESC';
-      case ModalDismissReasons.BACKDROP_CLICK:
-        return 'by clicking on a backdrop';
-      default:
-        return `with: ${reason}`;
-    }
-  }
 
   changeSelect(event: any, attribute: string) {
     if (event.target.value) {
       this.filters[attribute] = event.target.value
     } else {
-     delete this.filters[attribute]
+      delete this.filters[attribute]
     }
     this.loadDataUsers()
     console.log('es...', this.filters)
+  }
+
+  deleteUser(content: any) {
+    this.deleteByUser(this.idUserSelected).subscribe(async (data: any) => {
+      console.log('elimino')
+      this.loadDataUsers()
+      this.closeModal()
+      // TODO TOAS
+    });
+  }
+
+  closeModal() {
+    if (this.modalRef) {
+      this.modalRef.close();
+    }
   }
 }
