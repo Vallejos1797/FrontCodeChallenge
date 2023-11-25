@@ -43,41 +43,9 @@
     <div class="container-fluid p-3 shadow">
       <div class="d-grid gap-">
         <div class="bg-light border bg-white p-4">
-          <mat-table [dataSource]="dataSource">
-            <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
-              <mat-header-cell *matHeaderCellDef>{{ col | titlecase }}</mat-header-cell>
-              <mat-cell *matCellDef="let element">
-                {{ element[col] }}
-                <ng-container *ngIf="col === 'column7'">
-                  <!-- Aquí puedes poner tu icono de editar para la columna 7 -->
-                  <button mat-icon-button>
-                    <mat-icon>edit</mat-icon>
-                  </button>
-                  <button mat-icon-button>
-                    <mat-icon>trash</mat-icon>
-                  </button>
-                </ng-container>
-              </mat-cell>
-            </ng-container>
-
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          <app-table-users></app-table-users>
 
 
-          </mat-table>
-          <div class=" d-flex justify-content-between">
-            <h1> Total: </h1>
-            <mat-paginator [length]="dataSource.length" [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="pageSize"
-                           [pageIndex]="pageIndex"
-                           (page)="handlePage($event)"
-
-                           itemsPerPageLabel="Elementos por página"
-                           nextPageLabel="Siguiente"
-                           previousPageLabel="Anterior"
-                           firstPageLabel="Primera página"
-                           lastPageLabel="Última página"
-            ></mat-paginator>
-          </div>
 
         </div>
       </div>

@@ -10,35 +10,20 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import {TableUsersComponent} from "./components/table-users/table-users.component";
 
-export interface TableItem {
-  column1: string;
-  column2: string;
-  column3: string;
-  column4: string;
-  column5: string;
-  column6: string;
-}
-const ELEMENT_DATA: TableItem[] = [
-  { column1: 'Data 1', column2: 'Data 2', column3: 'Data 3', column4: 'Data 4', column5: 'Data 5', column6: 'Data 6' },
-  { column1: 'Data 1', column2: 'Data 2', column3: 'Data 3', column4: 'Data 4', column5: 'Data 5', column6: 'Data 6' },
-  { column1: 'Data 1', column2: 'Data 2', column3: 'Data 3', column4: 'Data 4', column5: 'Data 5', column6: 'Data 6' },
-  { column1: 'Data 1', column2: 'Data 2', column3: 'Data 3', column4: 'Data 4', column5: 'Data 5', column6: 'Data 6' },
-  { column1: 'Data 1', column2: 'Data 2', column3: 'Data 3', column4: 'Data 4', column5: 'Data 5', column6: 'Data 6' },
-  // ... Agrega más filas según sea necesario
-];
+
+
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, MatFormFieldModule, MatInputModule, MatTabsModule, MatTableModule, MatIconModule, MatButtonModule, MatPaginatorModule],
+  imports: [CommonModule, RouterOutlet, MatFormFieldModule, MatInputModule, MatTabsModule, MatTableModule, MatIconModule, MatButtonModule, MatPaginatorModule, TableUsersComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.sass'
 })
 export class AppComponent {
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
-  displayedColumns: string[] = ['column1', 'column2', 'column3', 'column4', 'column5', 'column6', 'column7'];
-  dataSource = ELEMENT_DATA;
+
   title = 'front-code-challenge';
   private modalService = inject(NgbModal);
   closeResult = '';
