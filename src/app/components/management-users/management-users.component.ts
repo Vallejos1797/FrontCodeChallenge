@@ -11,7 +11,9 @@ import {MatButtonModule} from "@angular/material/button";
 import {ManagementUsersService} from "../../services/management-users.service";
 import {HttpClient, HttpClientModule, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ModalDismissReasons, NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
+import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {ToastrModule, ToastrService} from 'ngx-toastr';
 
 export interface TableItem {
   column1: string;
@@ -28,7 +30,18 @@ const ELEMENT_DATA: any = [];
 @Component({
   selector: 'app-management-users',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterOutlet, MatFormFieldModule, MatInputModule, MatTabsModule, MatTableModule, MatIconModule, MatButtonModule, MatPaginatorModule, ManagementUsersComponent],
+  imports: [CommonModule,
+    HttpClientModule,
+    RouterOutlet,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTabsModule,
+    MatTableModule,
+    MatIconModule,
+    MatButtonModule,
+    MatPaginatorModule,
+    ManagementUsersComponent,
+    ReactiveFormsModule, ToastrModule],
   templateUrl: './management-users.component.html',
   styleUrl: './management-users.component.sass'
 })
@@ -46,14 +59,28 @@ export class ManagementUsersComponent implements OnInit {
   positions: any = [];
   filters: any = {per_page: 10, page: 0}
   pageActually = 0
-  closeResult = '';
-  private modalService = inject(NgbModal);
-  private apiUrl = 'http://127.0.0.1:8000/api/'; // Reemplaza con tu URL de la API
+  userForm: FormGroup;
+  modalService = inject(NgbModal);
+  submitted: boolean = false;
+  loading: boolean=false;
+  apiUrl = 'http://127.0.0.1:8000/api/'; // Reemplaza con tu URL de la API
 
-  constructor() {
+
+  constructor(private _formBuilder: FormBuilder) {
+    this.userForm = this._formBuilder.group({
+      departmentId: ['', [Validators.required]],
+      positionId: ['', [Validators.required]],
+      username: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      firstName: ['', [Validators.required]],
+      secondName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      secondLastName: ['', [Validators.required]],
+    });
   }
 
   ngOnInit(): void {
+
     this.loadData();
   }
 
@@ -146,5 +173,24 @@ export class ManagementUsersComponent implements OnInit {
     if (this.modalRef) {
       this.modalRef.close();
     }
+  }
+
+  get formControls() {
+    return this.userForm.controls;
+  }
+
+  onSubmit() {
+    this.submitted = true;
+    console.log('ingreso')
+    // stop here if form is invalid
+    if (this.userForm.invalid) {
+      console.log('no valido ', this.userForm)
+
+
+      // this.toastr.warning('Al parecer existe un error con la información que ingresó, por favor revise y vuelva a intentar.',
+      //   'Alerta');
+      return;
+    }
+    this.loading = true;
   }
 }

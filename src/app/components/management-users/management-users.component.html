@@ -16,7 +16,7 @@
           </mat-form-field>
 
           <mat-form-field class="m-2">
-            <select class="form-select" matNativeControl (change)="changeSelect($event,'departmentId')">
+            <select class="form-select" matNativeControl (change)="changeSelect($event,'positionId')">
               <option value="">Seleccione un Cargo</option>
               <option *ngFor="let position of positions" value="{{position?.id}}">{{position?.name}}</option>
 
@@ -79,55 +79,98 @@
     <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
   </div>
   <div class="modal-body">
-    <form>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
       <div class="row">
         <div class="form-group col-6">
-          <label for="exampleInputEmail1">Correo electrónico</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                 placeholder="Enter email">
+          <label>Departamento</label>
+
+          <mat-form-field class="m-2">
+            <select class="form-select" formControlName="departmentId" matNativeControl
+                    (change)="changeSelect($event,'departmentId')">
+              <option value="">Seleccione un Departamento</option>
+              <option *ngFor="let deparment of departments" value="{{deparment?.id}}">{{deparment?.name}}</option>
+
+            </select>
+          </mat-form-field>
+          <div *ngIf="submitted && formControls['departmentId'].errors" >
+            <div *ngIf="formControls['departmentId'].errors">
+              <div *ngIf="formControls['departmentId'].errors['required']">Departamento es requerido</div>
+            </div>
+          </div>
         </div>
         <div class="form-group col-6">
-          <label for="exampleInputPassword1">Contraseña</label>
-          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+          <label>Cargo</label>
+
+          <mat-form-field class="m-2">
+            <select class="form-select" matNativeControl formControlName="positionId"
+                    (change)="changeSelect($event,'positionId')">
+              <option value="">Seleccione un Cargo</option>
+              <option *ngFor="let position of positions" value="{{position?.id}}">{{position?.name}}</option>
+
+            </select>
+          </mat-form-field>
+          <div *ngIf="submitted &&formControls['positionId'].errors" >
+            <div *ngIf="formControls['positionId'].errors['required']">Cargo es requerido</div>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="form-group col-6">
-          <label for="exampleInputEmail1">Correo electrónico</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                 placeholder="Enter email">
-        </div>
-        <div class="form-group col-6">
-          <label for="exampleInputPassword1">Contraseña</label>
-          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-6">
-          <label for="exampleInputEmail1">Correo electrónico</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                 placeholder="Enter email">
-        </div>
-        <div class="form-group col-6">
-          <label for="exampleInputPassword1">Contraseña</label>
-          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-6">
-          <label for="exampleInputEmail1">Correo electrónico</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                 placeholder="Enter email">
-        </div>
-        <div class="form-group col-6">
-          <label for="exampleInputPassword1">Contraseña</label>
-          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-        </div>
-      </div>
+            <div class="row">
+              <div class="form-group col-6">
+                <label >Usuario</label>
+                <input type="text" class="form-control"  formControlName="username"
+                       placeholder="Ingrese Usuario">
+                <div *ngIf="submitted && formControls['username'].errors" >
+                  <div *ngIf="formControls['username'].errors['required']">Usuario es requerido</div>
+                </div>
+              </div>
+              <div class="form-group col-6">
+                <label >Email</label>
+                <input type="text" class="form-control"  placeholder="Ingrese Email" formControlName="email">
+                <div *ngIf="submitted && formControls['email'].errors" >
+                  <div *ngIf="formControls['email'].errors['required']">Email es requerido</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+
+              <div class="form-group col-6">
+                <label >Primer Nombre</label>
+                <input type="text" class="form-control"  placeholder="Ingrese Primer Nombre" formControlName="firstName">
+                <div *ngIf="submitted && formControls['firstName'].errors" >
+                  <div *ngIf="formControls['firstName'].errors['required']">Primer Nombre es requerido</div>
+                </div>
+              </div>
+
+              <div class="form-group col-6">
+                <label >Segundo Nombre</label>
+                <input type="text" class="form-control"  placeholder="Ingrese Segundo Nombre" formControlName="secondName">
+                <div *ngIf="submitted && formControls['secondName'].errors" >
+                  <div *ngIf="formControls['secondName'].errors['required']">Segundo Nombre es requerido</div>
+                </div>
+              </div>
+
+            </div>
+            <div class="row">
+
+              <div class="form-group col-6">
+                <label >Primer Apellido</label>
+                <input type="text" class="form-control"  placeholder="Ingrese Primer Apellido" formControlName="lastName">
+                <div *ngIf="submitted && formControls['lastName'].errors" >
+                  <div *ngIf="formControls['lastName'].errors['required']">Primer Apellido es requerido</div>
+                </div>
+              </div>
+              <div class="form-group col-6">
+                <label >Segundo Apellido</label>
+                <input type="text" class="form-control"  placeholder="Ingrese Segundo Apellido" formControlName="secondLastName">
+                <div *ngIf="submitted && formControls['secondLastName'].errors" >
+                  <div *ngIf="formControls['secondLastName'].errors['required']">secondLastName Apellido es requerido</div>
+                </div>
+              </div>
+            </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-light bg-primary custom-box " (click)="open(content)">Registrar</button>
+    <button type="submit" class="btn btn-light bg-primary custom-box " (click)="onSubmit()">Registrar</button>
     <button type="button" class="btn btn-light   custom-box" (click)="modal.close('Save click')">Cancelar</button>
   </div>
 </ng-template>
@@ -141,7 +184,8 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-light bg-primary custom-box " (click)="deleteUser(modalDelete)">Aceptar</button>
+    <button type="submit" class="btn btn-light bg-primary custom-box " (click)="deleteUser(modalDelete)">Aceptar
+    </button>
     <button type="button" class="btn btn-light   custom-box" (click)="modal.close('Save click')">Cancelar</button>
   </div>
 </ng-template>
