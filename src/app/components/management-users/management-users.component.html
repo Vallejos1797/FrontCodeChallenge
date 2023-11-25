@@ -40,7 +40,26 @@
     <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
       <mat-header-cell *matHeaderCellDef>{{ col | titlecase }}</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        {{ element.username }}
+        <ng-container *ngIf="col === 'Usuario'">
+          {{ element.username }}
+        </ng-container>
+
+        <ng-container *ngIf="col === 'Nombres'">
+          {{ element.firstName }}  {{ element.secondName }}
+        </ng-container>
+        <ng-container *ngIf="col === 'Apellidos'">
+          {{ element.lastName }}  {{ element.secondLastName }}
+        </ng-container>
+        <ng-container *ngIf="col === 'Departamento'">
+          {{ element['department'].name }}
+        </ng-container>
+        <ng-container *ngIf="col === 'Cargo'">
+          {{ element['position'].name }}
+        </ng-container>
+        <ng-container *ngIf="col === 'Email'">
+          {{ element.email }}
+        </ng-container>
+
         <ng-container *ngIf="col === 'Acciones'">
           <button mat-icon-button (click)="open(content,element.id)">
             <mat-icon>edit</mat-icon>

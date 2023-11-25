@@ -53,7 +53,7 @@ export class ManagementUsersComponent implements OnInit {
   idUserSelected: number = 0;
   httpClient = inject(HttpClient);
   totalDataSource = 0
-  displayedColumns: string[] = ['Usuario', 'Nombres', 'Apellidos', 'Departamento', ' Cargo', 'Email', 'Acciones'];
+  displayedColumns: string[] = ['Usuario', 'Nombres', 'Apellidos', 'Departamento', 'Cargo', 'Email', 'Acciones'];
   dataSource = ELEMENT_DATA;
   departments: any = [];
   positions: any = [];
@@ -165,6 +165,8 @@ export class ManagementUsersComponent implements OnInit {
     this.idUserSelected = idUser ? idUser : 0
     if (this.idUserSelected > 0) {
       this.getOneUser(this.idUserSelected).subscribe((data: any) => {
+        data.data.positionId= data.data['position'].id
+        data.data.departmentId= data.data['department'].id
         this.userForm.patchValue(data.data)
       })
     }
