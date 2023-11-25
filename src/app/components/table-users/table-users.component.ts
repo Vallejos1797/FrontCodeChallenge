@@ -9,7 +9,8 @@ import {MatTableModule} from "@angular/material/table";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {ManagementUsersService} from "../../services/management-users.service";
-import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {HttpClient, HttpClientModule, HttpParams} from "@angular/common/http";
+import {Observable} from "rxjs";
 
 export interface TableItem {
   column1: string;
@@ -33,13 +34,16 @@ const ELEMENT_DATA: any = [];
 
 export class TableUsersComponent implements OnInit {
   httpClient = inject(HttpClient);
+  private apiUrl = 'http://127.0.0.1:8000/api/'; // Reemplaza con tu URL de la API
 
-  @Input() dato: number | undefined;
+
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-  pageSize = 5;
-  pageIndex = 0;
-  displayedColumns: string[] = ['username', 'firstName', 'lastName', 'email', ' departmentId', 'positionId', 'column7'];
+  totalDataSource = 0
+
+  displayedColumns: string[] = ['Usuario', 'Nombres', 'Apellidos', 'Departamento', ' Cargo', 'Email', 'Acciones'];
   dataSource = ELEMENT_DATA;
+  filters: any = {per_page: 10, page: 0}
+  pageActually = 0
 
   constructor() {
   }
@@ -49,15 +53,21 @@ export class TableUsersComponent implements OnInit {
   }
 
   loadData(): void {
-    this.httpClient.get('http://127.0.0.1:8000/api/customUser?per_page=2').subscribe(async (data: any) => {
+    this.getAll(this.filters).subscribe(async (data: any) => {
       this.dataSource = await data.data
-      console.log('llega--',this.dataSource);
+      this.totalDataSource = data.meta.total
     });
   }
 
   handlePage(event: PageEvent) {
-    this.pageSize = event.pageSize;
-    this.pageIndex = event.pageIndex;
-    // Puedes cargar los datos correspondientes a la nueva página aquí
+    this.filters.per_page = event.pageSize
+    this.pageActually = event.pageIndex
+    this.filters.page = this.pageActually + 1;
+    this.loadData();
+  }
+
+  getAll(options?: any): Observable<any> {
+    const params = new HttpParams({fromObject: options});
+    return this.httpClient.get(`${this.apiUrl}customUser`, {params})
   }
 }

@@ -1,12 +1,10 @@
-<h1> hola {{dataSource.length}}</h1>
-
 <div *ngIf="dataSource.length>0">
   <mat-table [dataSource]="dataSource">
     <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
       <mat-header-cell *matHeaderCellDef>{{ col | titlecase }}</mat-header-cell>
       <mat-cell *matCellDef="let element">
         {{ element.username }}
-        <ng-container *ngIf="col === 'column7'">
+        <ng-container *ngIf="col === 'Acciones'">
           <button mat-icon-button>
             <mat-icon>edit</mat-icon>
           </button>
@@ -23,9 +21,9 @@
 
   </mat-table>
   <div class=" d-flex justify-content-between">
-    <h1> Total: </h1>
-    <mat-paginator [length]="dataSource.length" [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="pageSize"
-                   [pageIndex]="pageIndex"
+    <h1> Total registros: {{totalDataSource}} </h1>
+    <mat-paginator [length]="totalDataSource" [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="filters.per_page"
+                   [pageIndex]="pageActually"
                    (page)="handlePage($event)"
 
                    itemsPerPageLabel="Elementos por página"
