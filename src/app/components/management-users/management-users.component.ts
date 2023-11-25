@@ -62,12 +62,13 @@ export class ManagementUsersComponent implements OnInit {
   userForm: FormGroup;
   modalService = inject(NgbModal);
   submitted: boolean = false;
-  loading: boolean=false;
+  loading: boolean = false;
   apiUrl = 'http://127.0.0.1:8000/api/'; // Reemplaza con tu URL de la API
 
 
   constructor(private _formBuilder: FormBuilder) {
     this.userForm = this._formBuilder.group({
+      id: [''],
       departmentId: ['', [Validators.required]],
       positionId: ['', [Validators.required]],
       username: ['', [Validators.required]],
@@ -119,15 +120,31 @@ export class ManagementUsersComponent implements OnInit {
     this.loadDataUsers();
   }
 
+//services User
   getAll(options?: any): Observable<any> {
     const params = new HttpParams({fromObject: options});
     return this.httpClient.get(`${this.apiUrl}customUser`, {params})
+  }
+
+  createUser(options?: any): Observable<any> {
+    const body = options || {};
+    return this.httpClient.post(`${this.apiUrl}customUser`, body)
   }
 
   deleteByUser(idUser?: number): Observable<any> {
     return this.httpClient.delete(`${this.apiUrl}customUser/${idUser}`,)
   }
 
+  getOneUser(idUser?: number): Observable<any> {
+    return this.httpClient.get(`${this.apiUrl}customUser/${idUser}`,)
+  }
+
+  updateUser(options?: any): Observable<any> {
+    const body = options || {};
+    return this.httpClient.put(`${this.apiUrl}customUser/${options.id}`, body)
+  }
+
+//services department
 
   getAllDepartments(options?: any): Observable<any> {
 
@@ -135,6 +152,7 @@ export class ManagementUsersComponent implements OnInit {
     return this.httpClient.get(`${this.apiUrl}departments`, {params})
   }
 
+//services positions
   getAllPositions(options?: any): Observable<any> {
 
     const params = new HttpParams({fromObject: options});
@@ -143,8 +161,13 @@ export class ManagementUsersComponent implements OnInit {
 
 
   open(content: TemplateRef<any>, idUser?: number) {
-    console.log('tomo', idUser)
+    this.userForm.reset()
     this.idUserSelected = idUser ? idUser : 0
+    if (this.idUserSelected > 0) {
+      this.getOneUser(this.idUserSelected).subscribe((data: any) => {
+        this.userForm.patchValue(data.data)
+      })
+    }
     this.modalRef = this.modalRef = this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'});
 
   }
@@ -192,5 +215,23 @@ export class ManagementUsersComponent implements OnInit {
       return;
     }
     this.loading = true;
+    if (!this.userForm.value.id) {
+
+      this.createUser(this.userForm.value).subscribe(async (data: any) => {
+        console.log('creado')
+        this.loadDataUsers()
+        this.closeModal()
+        this.loading = false;
+        // TODO TOAS
+      });
+    } else {
+      this.updateUser(this.userForm.value).subscribe(async (data: any) => {
+        console.log('actualizo')
+        this.loadDataUsers()
+        this.closeModal()
+        this.loading = false;
+        // TODO TOAS
+      });
+    }
   }
 }
