@@ -30,8 +30,6 @@
 <div class="container-fluid  p-5 pt-2">
   <div class="d-grid gap-">
     <div class="bg-light border bg-white p-4">
-
-
       <div *ngIf="dataSource.length>0">
         <mat-table [dataSource]="dataSource" class="custom-table">
           <ng-container *ngFor="let col of displayedColumns; let i = index" [matColumnDef]="col">
@@ -39,7 +37,7 @@
                              style="{{col === 'Acciones'?'custom-action-col':'custom-first-column'}}">{{ col | titlecase }}</mat-header-cell>
             <mat-cell *matCellDef="let element">
               <ng-container *ngIf="col === 'Usuario'">
-               <h6> {{ element.username }}</h6>
+                {{ element.username }}
               </ng-container>
 
               <ng-container *ngIf="col === 'Nombres'">
@@ -60,16 +58,16 @@
 
               <ng-container *ngIf="col === 'Acciones'">
                 <div>
-
+                  <button class=" custom-edit bg-white  text-success border-0 " (click)="open(content,element.id)">
+                    <h6> <mat-icon class="mat-24" >edit</mat-icon>
+                      Editar</h6>
+                  </button>
+                  <button class="custom-delete text-danger  bg-white border-0" (click)="open(modalDelete,element.id)">
+                    <h6>   <mat-icon class="mat-12" >delete</mat-icon>
+                      Eliminar</h6>
+                  </button>
                 </div>
-                <button class=" custom-edit bg-white  text-success border-0 " (click)="open(content,element.id)">
-                  <h6> <mat-icon class="mat-24" >edit</mat-icon>
-                  Editar</h6>
-                </button>
-                <button class="custom-delete text-danger  bg-white border-0" (click)="open(modalDelete,element.id)">
-                   <mat-icon class="mat-12" >delete</mat-icon>
-                  <h6>  Eliminar</h6>
-                </button>
+
               </ng-container>
             </mat-cell>
           </ng-container>
