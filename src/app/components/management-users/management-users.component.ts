@@ -74,9 +74,9 @@ export class ManagementUsersComponent implements OnInit {
       username: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       firstName: ['', [Validators.required]],
-      secondName: ['', [Validators.required]],
+      secondName: [''],
       lastName: ['', [Validators.required]],
-      secondLastName: ['', [Validators.required]],
+      secondLastName: [''],
     });
   }
 
